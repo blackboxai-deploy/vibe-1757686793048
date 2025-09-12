@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - ChatApp</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+        
+        .container {
+            text-align: center;
+            max-width: 400px;
+            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin: 1rem;
+        }
+        
+        .icon {
+            width: 80px;
+            height: 80px;
+            background: #f3f4f6;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .wifi-icon {
+            width: 40px;
+            height: 40px;
+            opacity: 0.5;
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+        
+        p {
+            color: #6b7280;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+        
+        .retry-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .retry-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .retry-btn:active {
+            transform: translateY(0);
+        }
+        
+        .features {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .features h3 {
+            font-size: 1rem;
+            color: #374151;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+        
+        .feature-list li {
+            padding: 0.5rem 0;
+            color: #6b7280;
+            font-size: 0.9rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 640px) {
+            .container {
+                margin: 0.5rem;
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">
+            <svg class="wifi-icon" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.07 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/>
+                <path d="M12 20h.01v.01H12V20z" opacity="0.3"/>
+            </svg>
+        </div>
+        
+        <h1>You're offline</h1>
+        <p>Don't worry! Your messages are safe and you can still view your chat history. We'll reconnect you as soon as your internet is back.</p>
+        
+        <button class="retry-btn" onclick="window.location.reload()">
+            Try Again
+        </button>
+        
+        <div class="features">
+            <h3>Available offline:</h3>
+            <ul class="feature-list">
+                <li>View your chat history</li>
+                <li>Draft messages (will send when online)</li>
+                <li>Browse user list</li>
+                <li>Access app settings</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        // Auto-retry connection when online
+        window.addEventListener('online', function() {
+            setTimeout(function() {
+                window.location.reload();
+            }, 1000);
+        });
+        
+        // Update UI when connection status changes
+        function updateConnectionStatus() {
+            const isOnline = navigator.onLine;
+            const button = document.querySelector('.retry-btn');
+            
+            if (isOnline) {
+                button.textContent = 'Connection restored! Reloading...';
+                button.style.background = '#10b981';
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                button.textContent = 'Try Again';
+            }
+        }
+        
+        window.addEventListener('online', updateConnectionStatus);
+        window.addEventListener('offline', updateConnectionStatus);
+        
+        // Initial status check
+        updateConnectionStatus();
+    </script>
+</body>
+</html>
